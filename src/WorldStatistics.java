@@ -6,17 +6,19 @@ public class WorldStatistics {
 
     final static String countriesFile = "C:\\java\\src\\orszagok.txt";
     final static String citiesFile = "C:\\java\\src\\varosok.txt";
-    static  ArrayList<City> cityContainer = new ArrayList<>();
+    static ArrayList<City> cityContainer = new ArrayList<>();
     static ArrayList<Country> countryContainer = new ArrayList<>();
 
     public static void main(String[] args) throws Exception {
+
         readFile(countriesFile, citiesFile);
-
-
-        //System.out.println(countryContainer.get(0).getRuralPopulation()+"gsdgsdgsdgsgsgsgsgsgsdgsgsd");
+        //System.out.println(countryContainer.get(6).getRuralPopulation());//++csak a visszateresi tipust novelni kell
         //System.out.println(findCountryByISoCode("AGO"));  ++
         //System.out.println(getCountriesOfContinent("Africa"));  ++
-        System.out.println(getCitiesOfCountry("AGO"));
+        //System.out.println(getCitiesOfCountry("AFG"));++
+        //System.out.println(getAhmedCount());++
+        //System.out.println(getPopularFirstLetter());++
+        //System.out.println(lastIndependentCountry());++
     }
 
     public static void readFile(String countriesFile, String citiesFile) throws FileNotFoundException {
@@ -25,7 +27,6 @@ public class WorldStatistics {
             String cityLine;
             String[] cityLineParts;
             String[] countryLineParts;
-
 
             Scanner scCountry = new Scanner(new File(countriesFile));
             Scanner scCity = new Scanner(new File(citiesFile));
@@ -42,35 +43,24 @@ public class WorldStatistics {
                 }
                 Country country = new Country(countryLineParts[0], countryLineParts[1], countryLineParts[2], countryLineParts[3], Double.parseDouble(countryLineParts[4]), Integer.parseInt(countryLineParts[5]), Long.parseLong(countryLineParts[6]), countryLineParts[7]);
                 countryContainer.add(country);
-                //System.out.println(countryContainer);
             }
 
             while (scCity.hasNextLine()) {
                 cityLine = scCity.nextLine();
                 cityLineParts = cityLine.split(",", 3);
-                cityContainer.add(new City(cityLineParts[0], cityLineParts[1], Long.parseLong(cityLineParts[2])));
-            }
-int i=0;
-            System.out.println(countryContainer.size());
-
-            for (Country actualCountry : countryContainer) {
-                       //a country-nak a cityket tartalmazo fieldjet tolti fel
-                i++;
-                System.out.println(i);
-                for (City actualCity : cityContainer) {
-                    if (actualCountry.getCountryCode().equals(actualCity.getCountryCode())) {
-                        actualCountry.setCities(actualCity);
-                        //System.out.println(actualCity.getCityName()+"  "+actualCountry.toString());}
-                        System.out.println(actualCountry.getCities()+"ddfdfdfdfdfd");
-
+                City city = new City(cityLineParts[0], cityLineParts[1], Long.parseLong(cityLineParts[2]));
+                cityContainer.add(city);
+                for (int i = 0; i < countryContainer.size(); i++) {         //feltolti a countryk ArrayList<City> fieldeket
+                    if (countryContainer.get(i).getCountryCode().equals(cityLineParts[1])) {
+                        countryContainer.get(i).setCities(city);
                     }
-
-                    break;  }
+                }
             }
+            //System.out.println(countryContainer.get(1).getCities().get(2).getCityName());
+
         } catch (Exception e) {
             System.out.println(e.getLocalizedMessage() + " " + e.toString());
         }
-
     }
 
    /*
@@ -79,11 +69,11 @@ int i=0;
     public Country findCountryByISoCode(String isoCode)
     */
 
-    public static Country findCountryByISoCode(String isoCode){
-        Country c=null;
+    public static Country findCountryByISoCode(String isoCode) {
+        Country c = null;
         for (Country actualCountry : countryContainer) {
-            if(actualCountry.getCountryCode().equals(isoCode)){
-                c= actualCountry;
+            if (actualCountry.getCountryCode().equals(isoCode)) {
+                c = actualCountry;
             }
         }
         return c;
@@ -96,33 +86,100 @@ int i=0;
     public ArrayList<String> getCountriesOfContinent(String continentName)
     */
 
-    public static ArrayList<String> getCountriesOfContinent(String continentName){
-        ArrayList<String>a=new ArrayList<>();
+    public static ArrayList<String> getCountriesOfContinent(String continentName) {
+        ArrayList<String> a = new ArrayList<>();
         for (Country actualcountry : countryContainer) {
-            if(actualcountry.getContinent().equals(continentName)){
+            if (actualcountry.getContinent().equals(continentName)) {
                 a.add(actualcountry.getCountryCode());
             }
         }
         return a;
     }
+
     /*
     ?rj egy olyan met?dust, amely visszaadja egy param?ter?l kapott orsz?g v?rosainak a neveit
-
     (az orsz?got orsz?gk?ddal adjuk meg)! A met?dus szignat?r?ja az al?bbi legyen:
     public HashSet<String> getCitiesOfCountry(String countryCode)
      */
 
-    public static HashSet<String> getCitiesOfCountry(String countryCode){
-        HashSet<String>hSet=new HashSet<>();
+    public static HashSet<String> getCitiesOfCountry(String countryCode) {
+        HashSet<String> hSet = new HashSet<>();
         for (Country actualCountry : countryContainer) {
-            if(actualCountry.getCountryCode().equals(countryCode)){
-               // for (int i = 0; i < actualCountry.getCities().size(); i++) {
-                 //  hSet.add(actualCountry.getCities().get(i).getCityName());
+            if (actualCountry.getCountryCode().equals(countryCode)) {
+                for (int i = 0; i < actualCountry.getCities().size(); i++) {
+                    hSet.add(actualCountry.getCities().get(i).getCityName());
                 }
-
             }
 
-        return null;
+        }
+        return hSet;
+    }
+
+/*
+    Hány országnak az államfőjének nevében szerepel “Hamad” vagy “Ahmad” vagy “Ahmed”?
+    A metódus szignatúrája az alábbi legyen:
+    public int getAhmedCount()
+    Egy String objektumban a .indexOf() metódussal tudod megvizsgálni, hogy tartalmaz-e egy adott karaktersorozatot.
+ */
+
+    public static int getAhmedCount() {
+        int counter = 0;
+        for (Country actualCountry : countryContainer) {
+            if (actualCountry.getPresident().contains("Hamad") || actualCountry.getPresident().contains("Ahmad") || actualCountry.getPresident().contains("Ahmed")) {
+                counter++;
+            }
+        }
+        return counter;
+    }
+
+
+/*
+Melyik betűvel kezdődik a legtöbb országkód? A visszatérési érték egy egybetűs String,
+ a metódus szignatúrája pedig az alábbi legyen:
+public String getPopularFirstLetter()
+Egy hosszabb String első betűjének visszakapására a .substring() metódus használatos.
+*/
+
+    public static String getPopularFirstLetter() {
+
+        TreeMap<Character, Integer> tMap = new TreeMap<>();
+        for (Country actualCountry : countryContainer) {
+            Integer i = 0;
+            tMap.putIfAbsent(actualCountry.getCountryCode().charAt(0), i);            //a TreeMapbe teszek egy kezdobetut es a 0t, ha meg nincs az adott kezdobetu
+            i = tMap.get(actualCountry.getCountryCode().charAt(0));                    //  ha mar van a kezdobetu, akkor novelem a hozzarendelt valuet.
+            i++;
+            tMap.put(actualCountry.getCountryCode().charAt(0), i);                  //Character-Integer paros
+        }
+
+        ArrayList<Integer> a = new ArrayList<>();
+        for (Map.Entry<Character, Integer> entry : tMap.entrySet()) {                //kiveszi a leggyakoribb elofordulast
+            a.add(entry.getValue());
+        }
+        Collections.sort(a);
+        //System.out.println(tMap);                                                 //kiirja az egyes elofordulasokat betunkent
+        int max = a.get(a.size() - 1);
+        for (Map.Entry<Character, Integer> entry : tMap.entrySet()) {
+            if (entry.getValue() == max) {
+                return entry.getKey()+"";
+            }
+        }
+    return null;
+    }
+
+
+ /*
+Melyik ország nyerte el legkésőbb (a nyilvántartás szerint) a függetlenségét?
+Add vissza a megfelelő országkódot, a metódus szignatúrája az alábbi legyen:
+public String lastIndependentCountry()
+     */
+
+    public static String lastIndependentCountry(){
+        TreeMap<Integer, ArrayList<String>>tMap=new TreeMap<>();
+        for (Country actualCountry : countryContainer) {
+            tMap.putIfAbsent(actualCountry.getIndependency(),new ArrayList<>());
+            tMap.get(actualCountry.getIndependency()).add(actualCountry.getCountryCode());
+        }
+        return tMap.pollLastEntry()+"";
     }
 
 

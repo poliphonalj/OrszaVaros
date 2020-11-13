@@ -9,7 +9,7 @@ public class Country {
     private int independency;
     private long countryPopulation;
     private String president;
-    private ArrayList<City> cities;
+    private ArrayList<City> cities=new ArrayList<>();
 
     public Country(String countryCode, String countryName, String continent, String region, double area, int independency, long countryPopulation, String president) {
         this.countryCode = countryCode;
@@ -37,9 +37,9 @@ public class Country {
 
     public  double getRuralPopulation(){     //varosokon kivuli lakosok szama
         long sumPopulation=0;
-        //for (int i = 0; i < cities.size(); i++) {
-          //  sumPopulation=cities.get(i).getCityPopulation();
-        //}
+        for (int i = 0; i < cities.size(); i++) {
+           sumPopulation=cities.get(i).getCityPopulation();
+        }
         return countryPopulation-sumPopulation;
     }
 
@@ -54,6 +54,14 @@ public class Country {
 
     public String getCountryCode() {
         return countryCode;
+    }
+
+    public String getPresident() {
+        return president;
+    }
+
+    public int getIndependency() {
+        return independency;
     }
 
     @Override
