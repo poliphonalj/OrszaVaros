@@ -24,7 +24,7 @@ public class Country {
 
 
     public  double getPopulationDensity(){
-        if(countryPopulation==0 || area==0){
+        if(countryPopulation!=0 || area!=0){
             return countryPopulation/area;
         }
         return -1;
@@ -62,6 +62,10 @@ public class Country {
 
     public int getIndependency() {
         return independency;
+    }
+
+    public long getCountryPopulation() {
+        return countryPopulation;
     }
 
     @Override

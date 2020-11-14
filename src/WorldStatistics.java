@@ -12,13 +12,16 @@ public class WorldStatistics {
     public static void main(String[] args) throws Exception {
 
         readFile(countriesFile, citiesFile);
-        //System.out.println(countryContainer.get(6).getRuralPopulation());//++csak a visszateresi tipust novelni kell
-        //System.out.println(findCountryByISoCode("AGO"));  ++
-        //System.out.println(getCountriesOfContinent("Africa"));  ++
-        //System.out.println(getCitiesOfCountry("AFG"));++
-        //System.out.println(getAhmedCount());++
-        //System.out.println(getPopularFirstLetter());++
-        //System.out.println(lastIndependentCountry());++
+
+        //System.out.println(countryContainer.get(6).getRuralPopulation());
+        //System.out.println(countryContainer.get(1).getPopulationDensity());
+        //System.out.println(findCountryByISoCode("AGO"));
+        //System.out.println(getCountriesOfContinent("Africa"));
+        //System.out.println(getCitiesOfCountry("AFG"));
+        //System.out.println(getAhmedCount());
+        //System.out.println(getPopularFirstLetter());
+        //System.out.println(lastIndependentCountry());
+        //System.out.println(cityContainer.get(0).getPopulationPercentage());
     }
 
     public static void readFile(String countriesFile, String citiesFile) throws FileNotFoundException {
@@ -132,13 +135,6 @@ public class WorldStatistics {
         return counter;
     }
 
-
-/*
-Melyik betűvel kezdődik a legtöbb országkód? A visszatérési érték egy egybetűs String,
- a metódus szignatúrája pedig az alábbi legyen:
-public String getPopularFirstLetter()
-Egy hosszabb String első betűjének visszakapására a .substring() metódus használatos.
-*/
 
     public static String getPopularFirstLetter() {
 
